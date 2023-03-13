@@ -1,0 +1,84 @@
+{
+  "name": "microfe-utils",
+  "version": "1.1.4",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "keywords": [
+    "pridepack"
+  ],
+  "devDependencies": {
+    "@types/node": "^18.14.1",
+    "eslint": "^8.35.0",
+    "eslint-config-lxsmnsyc": "^0.4.8",
+    "pridepack": "2.4.1",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5",
+    "vitest": "^0.28.1"
+  },
+  "scripts": {
+    "prepublishOnly": "pridepack clean && pridepack build",
+    "build": "pridepack build",
+    "type-check": "pridepack check",
+    "lint": "pridepack lint",
+    "clean": "pridepack clean",
+    "watch": "pridepack watch",
+    "start": "pridepack start",
+    "dev": "pridepack dev",
+    "test": "vitest"
+  },
+  "private": false,
+  "description": "Solidjs and React helpers for Microfrontends",
+  "repository": {
+    "url": "",
+    "type": "git"
+  },
+  "homepage": "",
+  "bugs": {
+    "url": ""
+  },
+  "author": "aquarazorda",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "ramda": "^0.28.0",
+    "react": "^18.2.0",
+    "solid-js": "^1.6.14",
+    "ts-pattern": "^4.2.1"
+  },
+  "types": "./dist/types/index.d.ts",
+  "main": "./dist/cjs/production/index.js",
+  "module": "./dist/esm/production/index.js",
+  "exports": {
+    ".": {
+      "development": {
+        "require": "./dist/cjs/development/index.js",
+        "import": "./dist/esm/development/index.js"
+      },
+      "require": "./dist/cjs/production/index.js",
+      "import": "./dist/esm/production/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./Solid": {
+      "development": {
+        "require": "./dist/cjs/development/Solid.js",
+        "import": "./dist/esm/development/Solid.js"
+      },
+      "require": "./dist/cjs/production/Solid.js",
+      "import": "./dist/esm/production/Solid.js",
+      "types": "./dist/types/solid/index.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "Solid": [
+        "./dist/types/solid/index.d.ts"
+      ]
+    }
+  }
+}

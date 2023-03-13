@@ -1,0 +1,7 @@
+{
+  "target": "es2018",
+  "entrypoints": {
+    ".": "src/index.ts",
+    "./solid": "src/solid/index.ts"
+  }
+}
