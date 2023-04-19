@@ -7,23 +7,35 @@ export type EventsStoreType = {
   lang: Record<string, Record<string, string>>;
   variable: Record<string, any>;
   subscribed: Record<string, boolean>;
-}
+};
 
 type StoreType = [get: EventsStoreType, set: SetStoreFunction<EventsStoreType>];
 
 interface ToParentEvent {
-  type: 'lang' | 'variable' | 'execute' | 'redirect' | 'heightChange' | 'pushState' | 'onLoad' | 'scrollToTop';
+  type:
+    | 'lang'
+    | 'variable'
+    | 'execute'
+    | 'redirect'
+    | 'heightChange'
+    | 'pushState'
+    | 'onLoad'
+    | 'scrollToTop';
   value: any;
 }
 
 export type EventMessage = ToParentEvent['type'] | 'destroyed';
 
 interface FromParentEvent {
-  body: any,
-  message: EventMessage
+  body: any;
+  message: EventMessage;
 }
 
-export const createEvent = (eventName: string, type: EventMessage, value: any) => new CustomEvent(eventName, { detail: { type, value } });
+export const createEvent = (
+  eventName: string,
+  type: EventMessage,
+  value: any,
+) => new CustomEvent(eventName, { detail: { type, value } });
 
 // ------------------------------
 
@@ -40,12 +52,22 @@ const listener = (store: StoreType) => (e: Event) => {
 
 const [cleanupFn, setCleanupFn] = createSignal(() => {});
 
-export const createListener = (eventName: string, target: HTMLElement, store: StoreType) => {
+export const createListener = (
+  eventName: string,
+  target: HTMLElement,
+  store: StoreType,
+) => {
   target.addEventListener(eventName, listener(store));
-  setCleanupFn(() => () => target.removeEventListener(eventName, listener(store)));
+  setCleanupFn(
+    () => () => target.removeEventListener(eventName, listener(store)),
+  );
 };
 
-export const createDispatcher = (eventName: string, parent: HTMLElement, store: StoreType) => {
+export const createDispatcher = (
+  eventName: string,
+  parent: HTMLElement,
+  store: StoreType,
+) => {
   const [state, setState] = store;
 
   const dispatchEvent = (type: EventMessage, value: any) => {
@@ -57,7 +79,7 @@ export const createDispatcher = (eventName: string, parent: HTMLElement, store: 
   };
 
   const dispatchAndGrab = (type: 'lang' | 'variable', value: any) => {
-    if (value.subscriber && !state[type][value.key] || !value.subscriber) dispatchEvent(type, value);
+    if ((value.subscriber && !state[type][value.key]) || !value.subscriber) { dispatchEvent(type, value); }
 
     return createMemo<any>(() => state[type][value?.key || value]);
   };
@@ -71,9 +93,9 @@ export const createDispatcher = (eventName: string, parent: HTMLElement, store: 
   return {
     getLang: dispatchAndGrabLang,
     getVariable: (value: {
-      key: string,
-      methodStringPointer: string,
-      subscriber: boolean
+      key: string;
+      methodStringPointer: string;
+      subscriber: boolean;
     }) => dispatchAndGrab('variable', value),
     currLang: dispatchAndGrab('variable', {
       key: 'currentLanguage',
@@ -94,5 +116,6 @@ export const createDispatcher = (eventName: string, parent: HTMLElement, store: 
       });
     },
     execute: (value: any) => dispatchEvent('execute', value),
+    dispatchEvent,
   };
 };
